@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { CreateOrganizationRequest } from '@/type/create.organization.request'
 import { Organization } from '@/type/organization'
-import { SaveOrganizationRequest } from '@/type/save.organization.request'
+
+import { CreateOrganizationRequest, SaveOrganizationRequest } from './request'
 
 import { client } from '../http.client'
 
@@ -22,23 +22,24 @@ export const useGetOrganization = (id: string) => {
 
 export const useCreateOrganization = () => {
   return useMutation({
-    mutationFn: (body: CreateOrganizationRequest) =>
-      client.post<Organization>('/organization', body).then((r) => r.data),
+    mutationFn: (organization: CreateOrganizationRequest) =>
+      client.post<Organization>('/organization', organization).then((r) => r.data),
     mutationKey: ['CreateOrganization']
   })
 }
 
-export const useSaveOrganization = (id: string, organization: SaveOrganizationRequest) => {
+export const useSaveOrganization = () => {
   return useMutation({
-    mutationFn: (organization: SaveOrganizationRequest) =>
+    // prettier-ignore
+    mutationFn: ({ id, organization }: { id: string, organization: SaveOrganizationRequest }) =>
       client.put<Organization>(`/organization/${id}`, organization).then((r) => r.data),
-    mutationKey: ['SaveOrganization', id]
+    mutationKey: ['SaveOrganization']
   })
 }
 
-export const useRemoveOrganization = (id: string) => {
+export const useRemoveOrganization = () => {
   return useMutation({
-    mutationFn: () => client.delete<Organization>(`/organization/${id}`).then((r) => r.data),
-    mutationKey: ['RemoveOrganization', id]
+    mutationFn: (id: string) => client.delete<Organization>(`/organization/${id}`).then((r) => r.data),
+    mutationKey: ['RemoveOrganization']
   })
 }
