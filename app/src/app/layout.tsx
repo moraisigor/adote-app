@@ -1,37 +1,20 @@
 'use client'
 
-import {
-  ReactNode,
-  FunctionComponent
-} from 'react'
+import './style.css'
 
-import {
-  Footer,
-  Header
-} from '@/component'
+import { ReactNode } from 'react'
 
+import { Font } from './font'
 import { Provider } from './provider'
 
-type LayoutProps = {
-  children: ReactNode
-}
-
-const Layout: FunctionComponent<LayoutProps> = (props: LayoutProps) => {
-  const { children } = props
-
+export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <html lang='pt'>
+    <html
+      lang='en'
+      class={Font.className}>
       <body>
-        <Provider>
-          <div>
-            <Header />
-            {children}
-            <Footer />
-          </div>
-        </Provider>
+        <Provider>{children}</Provider>
       </body>
     </html>
   )
 }
-
-export default Layout
