@@ -58,8 +58,8 @@ export const SideBarMenu: FunctionComponent<SideBarMenuProps> = ({
         {current && (
           <DropDown>
             <DropDownButton
-              key={current.id}
               as={SideBarItem}
+              key={current.id}
               class='lg:mb-2.5'>
               <AvatarView name={current.name} />
               <SideBarLabel>{current.name}</SideBarLabel>
