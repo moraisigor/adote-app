@@ -1,4 +1,4 @@
-import type { ComponentType, FunctionComponent, SVGProps } from 'react'
+import type { FunctionComponent, ReactNode } from 'react'
 
 import { Dialog as DialogComponent, DialogPanel } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -8,7 +8,7 @@ type DialogProps = {
   option: {
     url: string
     name: string
-    icon: ComponentType<SVGProps<SVGSVGElement>>
+    children: ReactNode
     sign: {
       sign: string
       onSign: () => void
@@ -26,7 +26,7 @@ export const Dialog: FunctionComponent<DialogProps> = ({
   option: {
     url,
     name,
-    icon: Icon,
+    children,
     sign: { sign, onSign }
   },
   navigation,
@@ -34,7 +34,6 @@ export const Dialog: FunctionComponent<DialogProps> = ({
 }: DialogProps) => {
   return (
     <DialogComponent
-      class='lg:hidden'
       open={open}
       onClose={setOpen}>
       <div class='fixed inset-0 z-50' />
@@ -44,7 +43,7 @@ export const Dialog: FunctionComponent<DialogProps> = ({
             class='-m-1.5 p-1.5'
             href={url}>
             <span class='sr-only'>{name}</span>
-            <Icon />
+            {children}
           </a>
           <button
             class='-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-gray-400'
