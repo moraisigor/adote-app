@@ -51,7 +51,6 @@ export const SideBarMenu: FunctionComponent<SideBarMenuProps> = ({
   onOrganizationChange,
   ...props
 }: SideBarMenuProps) => {
-  console.log(current)
   return (
     <SideBar {...props}>
       <SideBarHeader>
