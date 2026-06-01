@@ -1,61 +1,58 @@
 'use client'
 
-import {
-  useState,
-  useEffect,
-  FunctionComponent
-} from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
-import {
-  Swiper,
-  Search
-} from '@/component'
+import { useRouter } from 'next/navigation'
 
-import styled from '@emotion/styled'
+import { Search } from '@/component/Search'
 
-type AppProps = {
+import { useSearchLocation } from '@/http/location'
+import { useListPost } from '@/http/post'
 
+type Location = {
+  id: string
+  name: string
 }
 
-const Block = styled.main`
-  height: 100vh;
-  background: #000072;
-`
+export default function Page() {
+  const router = useRouter()
 
-const App: FunctionComponent<AppProps> = (props: AppProps) => {
   const [search, setSearch] = useState<string>('')
+  const [location, setLocation] = useState<Location[]>([])
 
-  // remove later
-  const [show, setShow] = useState<boolean>(false)
-  const [content, setContent] = useState<string[]>([])
+  const isToSearch = useCallback((search: string) => search.length > 2, [])
 
-  const remove = () => window.removeEventListener('keydown', (e) => {
+  const onSelectLocation = useCallback((location: Location) => {}, [])
 
+  const onRemoveLocation = useCallback((id: string) => {}, [])
+
+  const { data: post = [] } = useListPost({
+    page: 1,
+    amount: 10,
+    location: location.map((e) => e.id)
   })
 
-  useEffect(() => {
-    window.addEventListener('keydown', ({ key }: any) => setContent((value) => [...value, key]))
+  const { data: list = [] } = useSearchLocation(search, isToSearch(search))
 
-    return () => remove()
+  const options = useMemo(() => {
+    return list.map((e) => {
+      return {
+        id: e.id,
+        name: `${e.city}, ${e.state}`
+      }
+    })
+  }, [list])
 
-  }, [])
-
-  useEffect(() => {
-    setShow(content.join('').includes('an'))
-
-    if (show) { remove() }
-
-  }, [content])
-
-  return show ?
-  (
-    <main>
-      <Swiper />
+  return (
+    <div>
       <Search
-        search={search}
-        onText={setSearch} />
-    </main>
-  ) : <Block />
+        values={location}
+        options={options}
+        onChange={(e) => setSearch(e.target.value)}
+        onSelectValue={onSelectLocation}
+        onRemoveValue={onRemoveLocation}
+      />
+      <ul></ul>
+    </div>
+  )
 }
-
-export default App
