@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 type User = {
   readonly id: string
-  readonly mail: string
+  readonly phone: string
 }
 
 type UserStore = {
