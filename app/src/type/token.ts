@@ -1,4 +1,10 @@
 export type Token = {
-  readonly hash: string
-  readonly expire: number
+  readonly token: {
+    readonly hash: string
+    readonly expire: number
+  }
+  readonly renew: {
+    readonly hash: string
+    readonly expire: number
+  }
 }
