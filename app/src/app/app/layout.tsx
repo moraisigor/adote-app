@@ -20,12 +20,15 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   const { mutate: set } = useSetCurrentOrganization()
 
-  const onOrganizationChange = useCallback((space: string) => {
-    set(space, {
-      onError: (e) => console.error(e),
-      onSuccess: () => setCurrent(space)
-    })
-  }, [])
+  const onOrganizationChange = useCallback(
+    (organization: string) => {
+      set(organization, {
+        onError: (e) => console.error(e),
+        onSuccess: () => setCurrent(organization)
+      })
+    },
+    [set, setCurrent]
+  )
 
   return (
     <SideBarLayout
