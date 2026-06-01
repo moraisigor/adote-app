@@ -1,8 +1,14 @@
+'use client'
+
 import './style.css'
 
-import { ReactNode } from 'react'
+import { ReactNode, useMemo } from 'react'
+
+import { useRouter } from 'next/navigation'
 
 import { Footer, Header } from '@/component'
+
+import { useTokenStore } from '@/store/token.store'
 
 import { Font } from './font'
 import { Provider } from './provider'
@@ -12,6 +18,32 @@ const main = []
 const social = []
 
 export default function Layout({ children }: { children: ReactNode }) {
+  const router = useRouter()
+
+  const { token } = useTokenStore()
+
+  const option = useMemo(() => {
+    if (token) {
+      return {
+        sign: 'Sair',
+        onSign: () => {}
+      }
+    }
+
+    return {
+      sign: 'Entrar',
+      onSign: () => router.push('/sign')
+    }
+  }, [token, router])
+
+  const navigation = useMemo(() => {
+    if (token) {
+      return []
+    }
+
+    return []
+  }, [token])
+
   return (
     <html
       lang='en'
@@ -21,11 +53,11 @@ export default function Layout({ children }: { children: ReactNode }) {
           <Header
             option={{
               url: '/',
-              name: 'Your Company',
-              icon: {} as any,
-              sign: { sign: 'Log in', onSign: () => {} }
+              name: 'Adote',
+              children: '',
+              sign: option
             }}
-            navigation={[]}
+            navigation={navigation}
           />
           <main class='flex-1'>{children}</main>
           <Footer
