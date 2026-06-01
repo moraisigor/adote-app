@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+export default {
   output: 'export',
-  compiler: {
-    emotion: true
-  }
+  experimental: {}
 }
