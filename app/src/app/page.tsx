@@ -1,56 +1,54 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { Search } from '@/component/Search'
+import { SelectAsync, type Option } from '@/component/Select'
 
-import { useSearchLocation } from '@/http/location'
+import { search } from '@/http/location'
 import { useListPost } from '@/http/post'
-
-type Location = {
-  id: string
-  name: string
-}
 
 export default function Page() {
   const router = useRouter()
 
-  const [search, setSearch] = useState<string>('')
-  const [location, setLocation] = useState<Location[]>([])
-
-  const isToSearch = useCallback((search: string) => search.length > 2, [])
-
-  const onSelectLocation = useCallback((location: Location) => {}, [])
-
-  const onRemoveLocation = useCallback((id: string) => {}, [])
+  const [location, setLocation] = useState<string[]>([])
 
   const { data: post = [] } = useListPost({
     page: 1,
     amount: 10,
-    location: location.map((e) => e.id)
+    location
   })
 
-  const { data: list = [] } = useSearchLocation(search, isToSearch(search))
+  const is = useCallback((search: string) => search.length >= 4, [])
 
-  const options = useMemo(() => {
-    return list.map((e) => {
-      return {
-        id: e.id,
-        name: `${e.city}, ${e.state}`
-      }
-    })
-  }, [list])
+  const options = useCallback(
+    (value: string) =>
+      // prettier-ignore
+      new Promise<{ value: string, label: string }[]>((resolve) => {
+        if (is(value)) {
+          return search(value).then((list) => {
+            const options = list.map((e) => ({
+              value: e.id,
+              label: `${e.city}, ${e.state}`
+            }))
+
+            return resolve(options)
+          })
+        }
+        return resolve([])
+      }),
+    [is]
+  )
+
+  const onChange = useCallback((values: Option[]) => setLocation(values.map((e) => e.value)), [])
 
   return (
     <div>
-      <Search
-        values={location}
+      <SelectAsync
+        multi
         options={options}
-        onChange={(e) => setSearch(e.target.value)}
-        onSelectValue={onSelectLocation}
-        onRemoveValue={onRemoveLocation}
+        onChange={onChange}
       />
       <ul></ul>
     </div>
