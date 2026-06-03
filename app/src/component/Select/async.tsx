@@ -1,5 +1,6 @@
 import { FunctionComponent } from 'react'
 
+import Animate from 'react-select/animated'
 import AsyncSelect from 'react-select/async'
 
 type SelectAsyncProps = {
@@ -12,6 +13,8 @@ type SelectAsyncProps = {
   >
 }
 
+const animate = Animate()
+
 export const SelectAsync: FunctionComponent<SelectAsyncProps> = ({
   multi = false,
   options,
@@ -21,6 +24,7 @@ export const SelectAsync: FunctionComponent<SelectAsyncProps> = ({
     <AsyncSelect
       {...props}
       isMulti={multi}
+      components={animate}
       loadOptions={options}
     />
   )
