@@ -4,7 +4,7 @@ import { Location } from '@/type/location'
 
 import { client } from '../http.client'
 
-export const location = (search: string) => {
+export const search = (search: string) => {
   return client
     .get<Location[]>('/location', { params: { search } })
     .then((r) => r.data)
