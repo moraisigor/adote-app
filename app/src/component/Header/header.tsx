@@ -9,18 +9,20 @@ type HeaderProps = {
     url: string
     name: string
     children: ReactNode
-    sign: {
-      sign: string
-      onSign: () => void
-    }
   }
-  navigation: {
-    url: string
+  navigation?: {
+    key: string
     name: string
   }[]
+  onNavigation?: (key: string) => void
 } & ComponentProps<'header'>
 
-export const Header: FunctionComponent<HeaderProps> = ({ option, navigation, ...props }: HeaderProps) => {
+export const Header: FunctionComponent<HeaderProps> = ({
+  option,
+  navigation,
+  onNavigation,
+  ...props
+}: HeaderProps) => {
   const { url, name, children } = option
 
   const [open, setOpen] = useState<boolean>(false)
@@ -54,6 +56,7 @@ export const Header: FunctionComponent<HeaderProps> = ({ option, navigation, ...
         option={option}
         navigation={navigation}
         setOpen={setOpen}
+        onNavigation={onNavigation}
       />
     </header>
   )
